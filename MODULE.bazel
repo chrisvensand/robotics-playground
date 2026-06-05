@@ -1,0 +1,46 @@
+module(
+    name = "robotics_playground",
+    version = "0.0.1",
+)
+
+bazel_dep(name = "rules_cc", version = "0.2.19")
+bazel_dep(name = "googletest", version = "1.17.0")
+bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
+git_override(
+    module_name = "hedron_compile_commands",
+    remote = "https://github.com/hedronvision/bazel-compile-commands-extractor.git",
+    commit = "abb61a688167623088f8768cc9264798df6a9d10",
+)
+
+bazel_dep(name = "rules_python", version = "2.0.2")
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(python_version = "3.11")
+
+bazel_dep(name = "pybind11_bazel", version = "2.13.6")
+bazel_dep(name = "platforms", version = "1.1.0")
+
+pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+pip.parse(
+    hub_name = "pip",
+    python_version = "3.11",
+    requirements_lock = "//:requirements_lock.txt",
+)
+use_repo(pip, "pip")
+
+bazel_dep(name = "rules_oci", version = "1.2.0")
+bazel_dep(name = "rules_pkg", version = "1.2.0")
+
+oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
+oci.pull(
+    name = "ubuntu_base",
+    image = "index.docker.io/library/ubuntu",
+    digest = "sha256:4f838adc7181d9039ac795a7d0aba05a9bd9ecd480d294483169c5def983b64d",
+    platforms = ["linux/amd64", "linux/arm64/v8"],
+)
+use_repo(oci, "ubuntu_base", "ubuntu_base_linux_amd64", "ubuntu_base_linux_arm64_v8")
+
+bazel_dep(name = "toolchains_llvm", version = "1.7.0")
+llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
+llvm.toolchain(llvm_version = "17.0.6")
+use_repo(llvm, "llvm_toolchain")
+register_toolchains("@llvm_toolchain//:all")

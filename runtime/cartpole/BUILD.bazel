@@ -1,0 +1,20 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+cc_library(
+    name = "cartpole",
+    srcs = ["cartpole.cc"],
+    hdrs = ["cartpole.h"],
+    deps = ["//runtime/sim:env"],
+    visibility = ["//visibility:public"],
+)
+
+load("@rules_cc//cc:defs.bzl", "cc_test")
+
+cc_test(
+    name = "cartpole_test",
+    srcs = ["cartpole_test.cc"],
+    deps = [
+        ":cartpole",
+        "@googletest//:gtest_main",
+    ],
+)

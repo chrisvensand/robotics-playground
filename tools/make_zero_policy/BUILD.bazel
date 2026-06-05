@@ -1,0 +1,6 @@
+load("@rules_python//python:defs.bzl", "py_binary")
+
+py_binary(
+    name = "make_zero_policy",
+    srcs = ["make_zero_policy.py"],
+)

@@ -1,0 +1,15 @@
+{
+  "name": "robotics-playground",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "target": "dev"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "llvm-vs-code-extensions.vscode-clangd"
+      ]
+    }
+  },
+  "postCreateCommand": "bazel run @hedron_compile_commands//:refresh_all && pre-commit install"
+}

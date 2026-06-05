@@ -1,0 +1,34 @@
+name: ci
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install pre-commit
+      - run: pre-commit run --all-files
+
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: bazel-contrib/setup-bazel@0.9.0
+        with:
+          bazelisk-cache: true
+          disk-cache: ${{ github.workflow }}
+          repository-cache: true
+
+      - name: Test
+        run: bazel test //...
+
+      - name: Cross-compile for linux/arm64
+        run: bazel build //inference/cartpole_runner:cartpole_runner --platforms=//platforms:linux_arm64
+
+      - name: Build OCI image
+        run: bazel build //inference/cartpole_runner:cartpole_runner_image

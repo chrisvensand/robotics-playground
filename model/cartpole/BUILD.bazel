@@ -1,0 +1,8 @@
+genrule(
+    name = "weights",
+    srcs = ["//assets/cartpole:cartpole_xml"],
+    outs = ["cartpole_policy.bin"],
+    cmd = "$(execpath //tools/training:train_cartpole) $@ $(location //assets/cartpole:cartpole_xml)",
+    tools = ["//tools/training:train_cartpole"],
+    visibility = ["//visibility:public"],
+)
