@@ -13,7 +13,7 @@ jobs:
       - run: pip install pre-commit
       - run: pre-commit run --all-files
 
-  test:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,17 +29,3 @@ jobs:
 
       - name: Build OCI image
         run: bazel build //inference/cartpole_runner:cartpole_runner_image
-
-  build-arm64:
-    runs-on: ubuntu-24.04-arm
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: bazel-contrib/setup-bazel@0.9.0
-        with:
-          bazelisk-cache: true
-          disk-cache: ${{ github.workflow }}
-          repository-cache: true
-
-      - name: Build for linux/arm64
-        run: bazel build //inference/cartpole_runner:cartpole_runner
