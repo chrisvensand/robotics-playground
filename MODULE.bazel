@@ -32,12 +32,12 @@ bazel_dep(name = "rules_pkg", version = "1.2.0")
 
 oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
 oci.pull(
-    name = "ubuntu_base",
-    image = "index.docker.io/library/ubuntu",
-    digest = "sha256:4f838adc7181d9039ac795a7d0aba05a9bd9ecd480d294483169c5def983b64d",
-    platforms = ["linux/amd64", "linux/arm64/v8"],
+    name = "distroless_cc",
+    image = "gcr.io/distroless/cc-debian12",
+    tag = "latest",
+    platforms = ["linux/amd64", "linux/arm64"],
 )
-use_repo(oci, "ubuntu_base", "ubuntu_base_linux_amd64", "ubuntu_base_linux_arm64_v8")
+use_repo(oci, "distroless_cc", "distroless_cc_linux_amd64", "distroless_cc_linux_arm64")
 
 bazel_dep(name = "toolchains_llvm", version = "1.7.0")
 

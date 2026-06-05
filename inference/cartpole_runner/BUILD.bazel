@@ -21,7 +21,7 @@ pkg_tar(
 
 oci_image(
     name = "cartpole_runner_image",
-    base = "@ubuntu_base_linux_amd64",
+    base = "@distroless_cc_linux_amd64",
     entrypoint = ["/app/cartpole_runner"],
     tars = [":runner_layer"],
 )

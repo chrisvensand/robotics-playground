@@ -12,6 +12,6 @@ RUN curl -Lo /usr/local/bin/bazel \
     https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-linux-amd64 \
     && chmod +x /usr/local/bin/bazel
 
-FROM base AS deploy
+FROM gcr.io/distroless/cc-debian12 AS deploy
 COPY cartpole_runner /app/cartpole_runner
 ENTRYPOINT ["/app/cartpole_runner"]
