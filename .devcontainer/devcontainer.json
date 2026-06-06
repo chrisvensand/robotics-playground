@@ -1,8 +1,7 @@
 {
   "name": "robotics-playground",
   "build": {
-    "dockerfile": "Dockerfile",
-    "target": "dev"
+    "dockerfile": "Dockerfile"
   },
   "customizations": {
     "vscode": {
