@@ -297,44 +297,44 @@
     "@@rules_oci+//oci:extensions.bzl%oci": {
       "general": {
         "bzlTransitiveDigest": "9prBaw/jr7WcO+S1LmUyfpqEqnX7P4o9eZ5c/6NYyNU=",
-        "usagesDigest": "kz+B8yyEVe3bcKtDUVnALuvMp5C0tvGDGbHPejpqjd4=",
+        "usagesDigest": "F1XHCHdswkI9/sJ1OBQVotA3ksxzsv5RXHB3UxRIPfQ=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
         "generatedRepoSpecs": {
-          "ubuntu_base_linux_amd64": {
+          "distroless_cc_linux_amd64": {
             "repoRuleId": "@@rules_oci+//oci/private:pull.bzl%oci_pull",
             "attributes": {
               "scheme": "https",
-              "registry": "index.docker.io",
-              "repository": "library/ubuntu",
-              "identifier": "sha256:4f838adc7181d9039ac795a7d0aba05a9bd9ecd480d294483169c5def983b64d",
+              "registry": "gcr.io",
+              "repository": "distroless/cc-debian12",
+              "identifier": "latest",
               "platform": "linux/amd64",
-              "target_name": "ubuntu_base_linux_amd64"
+              "target_name": "distroless_cc_linux_amd64"
             }
           },
-          "ubuntu_base_linux_arm64_v8": {
+          "distroless_cc_linux_arm64": {
             "repoRuleId": "@@rules_oci+//oci/private:pull.bzl%oci_pull",
             "attributes": {
               "scheme": "https",
-              "registry": "index.docker.io",
-              "repository": "library/ubuntu",
-              "identifier": "sha256:4f838adc7181d9039ac795a7d0aba05a9bd9ecd480d294483169c5def983b64d",
-              "platform": "linux/arm64/v8",
-              "target_name": "ubuntu_base_linux_arm64_v8"
+              "registry": "gcr.io",
+              "repository": "distroless/cc-debian12",
+              "identifier": "latest",
+              "platform": "linux/arm64",
+              "target_name": "distroless_cc_linux_arm64"
             }
           },
-          "ubuntu_base": {
+          "distroless_cc": {
             "repoRuleId": "@@rules_oci+//oci/private:pull.bzl%oci_alias",
             "attributes": {
-              "target_name": "ubuntu_base",
+              "target_name": "distroless_cc",
               "scheme": "https",
-              "registry": "index.docker.io",
-              "repository": "library/ubuntu",
-              "identifier": "sha256:4f838adc7181d9039ac795a7d0aba05a9bd9ecd480d294483169c5def983b64d",
+              "registry": "gcr.io",
+              "repository": "distroless/cc-debian12",
+              "identifier": "latest",
               "platforms": {
-                "@@platforms//cpu:x86_64": "@ubuntu_base_linux_amd64",
-                "@@platforms//cpu:arm64": "@ubuntu_base_linux_arm64_v8"
+                "@@platforms//cpu:x86_64": "@distroless_cc_linux_amd64",
+                "@@platforms//cpu:arm64": "@distroless_cc_linux_arm64"
               }
             }
           },
