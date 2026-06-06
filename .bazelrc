@@ -1,3 +1,8 @@
+build "--workspace_status_command=git log -1 '--format=STABLE_GIT_SHA %H%nSTABLE_GIT_STATUS clean'"
+
+build:release --stamp
+build:release --define=release=true
+
 build:remote --bes_results_url=https://app.buildbuddy.io/invocation/
 build:remote --bes_backend=grpcs://remote.buildbuddy.io
 build:remote --remote_cache=grpcs://remote.buildbuddy.io
