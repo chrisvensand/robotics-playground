@@ -1,17 +1,26 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary")
+load("@rules_oci//oci:defs.bzl", "oci_image", "oci_tarball")
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+
+config_setting(
+    name = "release_build",
+    define_values = {"release": "true"},
+)
 
 cc_binary(
     name = "cartpole_runner",
     srcs = ["main.cc"],
     data = ["//model/cartpole:weights"],
+    defines = select({
+        ":release_build": ["RELEASE_BUILD"],
+        "//conditions:default": [],
+    }),
     deps = [
-        "//runtime/cartpole:cartpole",
+        "//runtime/cartpole",
         "//runtime/policy:linear_policy",
+        "//tools/build_info",
     ],
 )
-
-load("@rules_oci//oci:defs.bzl", "oci_image", "oci_tarball")
-load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 
 pkg_tar(
     name = "runner_layer",

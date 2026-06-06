@@ -1,0 +1,10 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+load(":build_info.bzl", "build_info_header")
+
+build_info_header(name = "build_info_h")
+
+cc_library(
+    name = "build_info",
+    hdrs = [":build_info_h"],
+    visibility = ["//visibility:public"],
+)

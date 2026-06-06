@@ -20,3 +20,12 @@ repos:
       - id: ruff
         args: [--fix]
       - id: ruff-format
+
+  - repo: local
+    hooks:
+      - id: buildifier
+        name: buildifier
+        language: system
+        entry: buildifier
+        files: '(BUILD|BUILD\.bazel|MODULE\.bazel|\.bzl|WORKSPACE|WORKSPACE\.bazel)$'
+        args: [-lint=warn]

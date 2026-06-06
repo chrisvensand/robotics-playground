@@ -1,14 +1,12 @@
-load("@rules_cc//cc:defs.bzl", "cc_library")
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 
 cc_library(
     name = "cartpole",
     srcs = ["cartpole.cc"],
     hdrs = ["cartpole.h"],
-    deps = ["//runtime/sim:env"],
     visibility = ["//visibility:public"],
+    deps = ["//runtime/sim:env"],
 )
-
-load("@rules_cc//cc:defs.bzl", "cc_test")
 
 cc_test(
     name = "cartpole_test",

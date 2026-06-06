@@ -10,6 +10,7 @@ env:
 
 jobs:
   devcontainer:
+    name: devcontainer
     runs-on: ubuntu-24.04-arm
     permissions:
       contents: read
@@ -32,6 +33,7 @@ jobs:
           cache-to: type=inline
 
   lint:
+    name: lint
     needs: devcontainer
     runs-on: ubuntu-24.04-arm
     container:
@@ -44,6 +46,7 @@ jobs:
       - run: pre-commit run --all-files
 
   build-and-test:
+    name: build-and-test
     needs: devcontainer
     runs-on: ubuntu-24.04-arm
     container:

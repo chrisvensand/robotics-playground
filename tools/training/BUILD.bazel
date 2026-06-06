@@ -3,21 +3,21 @@ load("@rules_python//python:defs.bzl", "py_binary", "py_library")
 py_library(
     name = "random_search",
     srcs = ["random_search.py"],
+    visibility = ["//visibility:public"],
     deps = [
         "@pip//mujoco",
         "@pip//numpy",
     ],
-    visibility = ["//visibility:public"],
 )
 
 py_binary(
     name = "train_cartpole",
     srcs = ["train_cartpole.py"],
     data = ["//assets/cartpole:cartpole_xml"],
+    visibility = ["//visibility:public"],
     deps = [
         ":random_search",
         "@pip//mujoco",
         "@pip//numpy",
     ],
-    visibility = ["//visibility:public"],
 )

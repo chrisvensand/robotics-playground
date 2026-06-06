@@ -1,13 +1,12 @@
 load("@pybind11_bazel//:build_defs.bzl", "pybind_extension")
+load("@rules_python//python:defs.bzl", "py_test")
 
 pybind_extension(
     name = "linear_policy_py",
     srcs = ["linear_policy_py.cc"],
-    deps = ["//runtime/policy:linear_policy"],
     visibility = ["//visibility:public"],
+    deps = ["//runtime/policy:linear_policy"],
 )
-
-load("@rules_python//python:defs.bzl", "py_test")
 
 py_test(
     name = "linear_policy_test",
