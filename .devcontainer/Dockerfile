@@ -5,8 +5,10 @@ RUN apt-get update && apt-get install -y \
     curl \
     git \
     clangd \
-    pre-commit \
+    python3-pip \
     && rm -rf /var/lib/apt/lists/*
+
+RUN pip3 install pre-commit
 
 RUN ARCH=$(dpkg --print-architecture) && \
     curl -Lo /usr/local/bin/bazel \
