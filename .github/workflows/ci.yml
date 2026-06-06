@@ -10,6 +10,7 @@ env:
 
 jobs:
   devcontainer:
+    name: ci / devcontainer
     runs-on: ubuntu-24.04-arm
     permissions:
       contents: read
