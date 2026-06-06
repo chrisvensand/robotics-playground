@@ -7,14 +7,7 @@ env:
 
 jobs:
   devcontainer:
-    strategy:
-      matrix:
-        include:
-          - runner: ubuntu-latest
-            tag-suffix: amd64
-          - runner: ubuntu-24.04-arm
-            tag-suffix: arm64
-    runs-on: ${{ matrix.runner }}
+    runs-on: ubuntu-24.04-arm
     permissions:
       contents: read
       packages: write
@@ -31,30 +24,9 @@ jobs:
         with:
           context: .devcontainer
           push: true
-          tags: ${{ env.DEVCONTAINER_IMAGE }}-${{ matrix.tag-suffix }}
-          cache-from: type=registry,ref=${{ env.DEVCONTAINER_IMAGE }}-${{ matrix.tag-suffix }}
+          tags: ${{ env.DEVCONTAINER_IMAGE }}
+          cache-from: type=registry,ref=${{ env.DEVCONTAINER_IMAGE }}
           cache-to: type=inline
-
-  devcontainer-manifest:
-    needs: devcontainer
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - uses: docker/setup-buildx-action@v3
-
-      - uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - run: |
-          docker buildx imagetools create \
-            -t ${{ env.DEVCONTAINER_IMAGE }} \
-            ${{ env.DEVCONTAINER_IMAGE }}-amd64 \
-            ${{ env.DEVCONTAINER_IMAGE }}-arm64
 
   lint:
     runs-on: ubuntu-latest
@@ -64,8 +36,8 @@ jobs:
       - run: pre-commit run --all-files
 
   build-and-test:
-    needs: devcontainer-manifest
-    runs-on: ubuntu-latest
+    needs: devcontainer
+    runs-on: ubuntu-24.04-arm
     container:
       image: ghcr.io/${{ github.repository_owner }}/robotics-playground:devcontainer
       credentials:
@@ -82,20 +54,3 @@ jobs:
 
       - name: Build OCI image
         run: bazel build //inference/cartpole_runner:cartpole_runner_image --config=remote
-
-  build-arm64:
-    needs: devcontainer-manifest
-    runs-on: ubuntu-24.04-arm
-    container:
-      image: ghcr.io/${{ github.repository_owner }}/robotics-playground:devcontainer
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Configure BuildBuddy
-        run: echo "build:remote --remote_header=x-buildbuddy-api-key=${{ secrets.BUILDBUDDY_API_KEY }}" >> .bazelrc.user
-
-      - name: Test
-        run: bazel test //... --config=remote
