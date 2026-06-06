@@ -1,0 +1,14 @@
+Checks: >
+  clang-diagnostic-*,
+  clang-analyzer-*,
+  modernize-use-override,
+  modernize-use-nullptr,
+  modernize-use-default-member-init,
+  readability-braces-around-statements,
+  readability-const-return-type,
+  readability-redundant-smartptr-get,
+  -clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling
+
+WarningsAsErrors: ""
+HeaderFilterRegex: "^runtime/|^inference/|^bindings/"
+FormatStyle: file

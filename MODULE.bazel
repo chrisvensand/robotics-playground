@@ -1,0 +1,47 @@
+module(
+    name = "robotics_playground",
+    version = "0.0.1",
+)
+
+bazel_dep(name = "rules_cc", version = "0.2.19")
+bazel_dep(name = "googletest", version = "1.17.0")
+bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
+git_override(
+    module_name = "hedron_compile_commands",
+    remote = "https://github.com/hedronvision/bazel-compile-commands-extractor.git",
+    commit = "abb61a688167623088f8768cc9264798df6a9d10",
+)
+
+bazel_dep(name = "rules_python", version = "2.0.2")
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(python_version = "3.11")
+
+bazel_dep(name = "pybind11_bazel", version = "2.13.6")
+bazel_dep(name = "platforms", version = "1.1.0")
+
+pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+pip.parse(
+    hub_name = "pip",
+    python_version = "3.11",
+    requirements_lock = "//:requirements_lock.txt",
+)
+use_repo(pip, "pip")
+
+bazel_dep(name = "rules_oci", version = "1.2.0")
+bazel_dep(name = "rules_pkg", version = "1.2.0")
+
+oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
+oci.pull(
+    name = "distroless_cc",
+    image = "gcr.io/distroless/cc-debian12",
+    tag = "latest",
+    platforms = ["linux/amd64", "linux/arm64"],
+)
+use_repo(oci, "distroless_cc", "distroless_cc_linux_amd64", "distroless_cc_linux_arm64")
+
+bazel_dep(name = "toolchains_llvm", version = "1.7.0")
+
+llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
+llvm.toolchain(llvm_version = "17.0.6")
+use_repo(llvm, "llvm_toolchain")
+register_toolchains("@llvm_toolchain//:all")

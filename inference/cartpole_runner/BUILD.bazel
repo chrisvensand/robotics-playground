@@ -1,0 +1,33 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+
+cc_binary(
+    name = "cartpole_runner",
+    srcs = ["main.cc"],
+    data = ["//model/cartpole:weights"],
+    deps = [
+        "//runtime/cartpole:cartpole",
+        "//runtime/policy:linear_policy",
+    ],
+)
+
+load("@rules_oci//oci:defs.bzl", "oci_image", "oci_tarball")
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+
+pkg_tar(
+    name = "runner_layer",
+    srcs = [":cartpole_runner"],
+    package_dir = "/app",
+)
+
+oci_image(
+    name = "cartpole_runner_image",
+    base = "@distroless_cc_linux_amd64",
+    entrypoint = ["/app/cartpole_runner"],
+    tars = [":runner_layer"],
+)
+
+oci_tarball(
+    name = "cartpole_runner_tarball",
+    image = ":cartpole_runner_image",
+    repo_tags = ["cartpole_runner:latest"],
+)

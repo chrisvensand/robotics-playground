@@ -1,0 +1,19 @@
+<mujoco model="cartpole">
+    <compiler autolimits="true"/>
+    <default>
+        <joint damping="0.05"/>
+    </default>
+    <worldbody>
+        <body name="cart" pos="0 0 0">
+            <joint name="slider" type="slide" axis="1 0 0" range="-2.4 2.4"/>
+            <geom type="box" size="0.1 0.05 0.05"/>
+            <body name="pole" pos="0 0 0.05">
+                <joint name="hinge" type="hinge" axis="0 1 0"/>
+                <geom type="capsule" fromto="0 0 0 0 0 0.6" size="0.02"/>
+            </body>
+        </body>
+    </worldbody>
+    <actuator>
+        <motor name="slide" joint="slider" gear="100"/>
+    </actuator>
+</mujoco>

@@ -1,0 +1,8 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+cc_library(
+    name = "linear_policy",
+    srcs = ["linear_policy.cc"],
+    hdrs = ["linear_policy.h"],
+    visibility = ["//visibility:public"],
+)

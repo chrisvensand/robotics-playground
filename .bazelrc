@@ -1,0 +1,8 @@
+build:remote --bes_results_url=https://app.buildbuddy.io/invocation/
+build:remote --bes_backend=grpcs://remote.buildbuddy.io
+build:remote --remote_cache=grpcs://remote.buildbuddy.io
+build:remote --remote_timeout=600
+build:remote --remote_upload_local_results
+
+# Local developer overrides (API key, etc.) — not committed
+try-import %workspace%/.bazelrc.user
