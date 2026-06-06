@@ -1,4 +1,4 @@
-build "--workspace_status_command=git log -1 '--format=STABLE_GIT_SHA %H%nSTABLE_GIT_STATUS clean'"
+build "--workspace_status_command=bash stable-status.sh"
 
 build:release --stamp
 build:release --define=release=true
