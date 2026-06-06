@@ -6,7 +6,7 @@
 
 int main() {
 #ifdef RELEASE_BUILD
-    std::printf("build: %s\n", BUILD_GIT_SHA);
+    std::printf("build: %s (%s)\n", BUILD_VERSION, BUILD_GIT_SHA);
 #endif
     cartpole::CartPole env;
     auto pol = policy::LinearPolicy::load("model/cartpole/cartpole_policy.bin");

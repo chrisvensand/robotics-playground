@@ -7,8 +7,10 @@ def _build_info_header_impl(ctx):
         outputs = [out],
         command = """\
 SHA=$(grep '^STABLE_GIT_SHA ' {stable} 2>/dev/null | awk '{{print $2}}')
+VERSION=$(grep '^STABLE_VERSION ' {stable} 2>/dev/null | awk '{{print $2}}')
 if [ -z "$SHA" ]; then SHA="unknown"; fi
-printf '#pragma once\\n#define BUILD_GIT_SHA "%s"\\n' "$SHA" > {out}
+if [ -z "$VERSION" ]; then VERSION="dev"; fi
+printf '#pragma once\\n#define BUILD_GIT_SHA "%s"\\n#define BUILD_VERSION "%s"\\n' "$SHA" "$VERSION" > {out}
 """.format(stable = ctx.info_file.path, out = out.path),
     )
     return [DefaultInfo(files = depset([out]))]

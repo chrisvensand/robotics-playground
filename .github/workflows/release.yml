@@ -1,0 +1,52 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+env:
+  DEVCONTAINER_IMAGE: ghcr.io/${{ github.repository_owner }}/robotics-playground:devcontainer
+
+jobs:
+  release:
+    name: release
+    runs-on: ubuntu-24.04-arm
+    permissions:
+      contents: write
+      packages: read
+    container:
+      image: ghcr.io/${{ github.repository_owner }}/robotics-playground:devcontainer
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure BuildBuddy
+        run: echo "build:remote --remote_header=x-buildbuddy-api-key=${{ secrets.BUILDBUDDY_API_KEY }}" >> .bazelrc.user
+
+      - name: Build
+        run: |
+          bazel build \
+            //inference/cartpole_runner:cartpole_runner \
+            //inference/cartpole_runner:cartpole_runner_image \
+            --config=release \
+            --config=remote
+
+      - name: Stage artifacts
+        run: |
+          cp bazel-bin/inference/cartpole_runner/cartpole_runner \
+             cartpole_runner-${GITHUB_REF_NAME}-linux-arm64
+          cp bazel-bin/model/cartpole/cartpole_policy.bin \
+             cartpole_policy-${GITHUB_REF_NAME}.bin
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            cartpole_runner-*
+            cartpole_policy-*
+          generate_release_notes: true
