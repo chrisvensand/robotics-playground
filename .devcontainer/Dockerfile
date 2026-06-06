@@ -12,3 +12,5 @@ RUN ARCH=$(dpkg --print-architecture) && \
     curl -Lo /usr/local/bin/bazel \
     https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-linux-${ARCH} \
     && chmod +x /usr/local/bin/bazel
+
+RUN git config --system --add safe.directory '*'

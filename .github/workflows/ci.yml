@@ -29,10 +29,15 @@ jobs:
           cache-to: type=inline
 
   lint:
-    runs-on: ubuntu-latest
+    needs: devcontainer
+    runs-on: ubuntu-24.04-arm
+    container:
+      image: ghcr.io/${{ github.repository_owner }}/robotics-playground:devcontainer
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
-      - run: pip install pre-commit
       - run: pre-commit run --all-files
 
   build-and-test:
