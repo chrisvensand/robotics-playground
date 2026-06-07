@@ -1,7 +1,19 @@
-load("@rules_python//python:defs.bzl", "py_binary")
+load("@rules_python//python:defs.bzl", "py_binary", "py_library", "py_test")
+
+py_library(
+    name = "make_manifest_lib",
+    srcs = ["make_manifest.py"],
+    visibility = ["//visibility:public"],
+)
 
 py_binary(
     name = "make_manifest",
     srcs = ["make_manifest.py"],
     visibility = ["//visibility:public"],
+)
+
+py_test(
+    name = "make_manifest_test",
+    srcs = ["make_manifest_test.py"],
+    deps = [":make_manifest_lib"],
 )
