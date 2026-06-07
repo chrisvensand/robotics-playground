@@ -43,10 +43,34 @@ jobs:
           cp bazel-bin/model/cartpole/cartpole_policy.bin \
              cartpole_policy-${GITHUB_REF_NAME}.bin
 
+      - name: Generate manifest
+        run: |
+          python3 tools/release/make_manifest.py \
+            "${GITHUB_REF_NAME#v}" \
+            "cartpole_runner-${GITHUB_REF_NAME}-linux-arm64" \
+            "cartpole_policy-${GITHUB_REF_NAME}.bin" \
+            > manifest.json
+          cat manifest.json
+
+      - name: Sign manifest
+        run: |
+          echo "${{ secrets.RELEASE_SIGNING_KEY }}" > /tmp/signing_key.pem
+          openssl dgst -sha256 \
+            -sign /tmp/signing_key.pem \
+            -out manifest.json.sig \
+            manifest.json
+          rm -f /tmp/signing_key.pem
+          openssl dgst -sha256 \
+            -verify keys/release_public_key.pem \
+            -signature manifest.json.sig \
+            manifest.json
+
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
           files: |
             cartpole_runner-*
             cartpole_policy-*
+            manifest.json
+            manifest.json.sig
           generate_release_notes: true
