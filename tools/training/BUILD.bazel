@@ -21,3 +21,33 @@ py_binary(
         "@pip//numpy",
     ],
 )
+
+py_binary(
+    name = "make_readme_gif",
+    srcs = ["make_readme_gif.py"],
+    data = [
+        "//assets/cartpole:cartpole_xml",
+        "//model/cartpole:weights",
+    ],
+    deps = [
+        ":random_search",
+        "@pip//imageio",
+        "@pip//mujoco",
+        "@pip//numpy",
+    ],
+)
+
+py_binary(
+    name = "eval_cartpole",
+    srcs = ["eval_cartpole.py"],
+    data = [
+        "//assets/cartpole:cartpole_xml",
+        "//model/cartpole:weights",
+    ],
+    deps = [
+        ":random_search",
+        "@pip//av",
+        "@pip//mujoco",
+        "@pip//numpy",
+    ],
+)
