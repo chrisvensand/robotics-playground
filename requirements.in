@@ -1,2 +1,5 @@
+av==17.1.0
+imageio==2.37.0
 mujoco==3.3.3
 numpy==2.3.0
+scipy==1.15.3
