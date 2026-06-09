@@ -57,6 +57,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/bazel
+          key: bazel-repo-${{ runner.os }}-${{ hashFiles('MODULE.bazel.lock') }}
+          restore-keys: bazel-repo-${{ runner.os }}-
+
       - name: Configure BuildBuddy
         run: echo "build:remote --remote_header=x-buildbuddy-api-key=${{ secrets.BUILDBUDDY_API_KEY }}" >> .bazelrc.user
 
